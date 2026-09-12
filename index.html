@@ -41,12 +41,12 @@ button{border:0;font-weight:800;cursor:pointer}.primary{background:#f59e0b}.dark
 <div class="card"><div id="map">Google Maps will appear here after API key setup</div></div>
 
 <div class="card fare">
-<div>Estimated Fare</div><div class="big" id="total">₹450</div>
-<div class="line"><span>Base fare</span><span id="base">₹250</span></div>
+<div>Estimated Fare</div><div class="big" id="total">₹500</div>
+<div class="line"><span>Base fare</span><span id="base">₹500</span></div>
 <div class="line"><span>Distance fare</span><span id="dist">₹200</span></div>
 <div class="line"><span>Loading / Unloading</span><span id="load">₹0</span></div>
 <div class="line"><span>Waiting</span><span id="wait">₹0</span></div>
-<div class="line total"><span>Total</span><span id="sum">₹450</span></div>
+<div class="line total"><span>Total</span><span id="sum">₹500</span></div>
 </div>
 
 <div class="card">
@@ -69,7 +69,7 @@ async function createBooking(){
  const body={phone:document.getElementById("phone").value,pickup:p,drop:d,km:+km.value,goods:goods.value,loading:+loading.value,waiting:+waiting.value,fare:fare()};
  try{let r=await fetch("/api/bookings",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)});let x=await r.json();msg.style.display="block";msg.innerHTML="Booking ID: <b>"+x.id+"</b> — Driver assignment ke liye request bhej di gayi."}catch(e){msg.style.display="block";msg.textContent="Demo mode: booking locally ready. Server start karne par live booking save hogi."}
 }
-function sendWhatsApp(){let text=`Shree Shyam Prime Logistics%0AVehicle: Mahindra Veero 10 Feet%0APickup: ${encodeURIComponent(pickup.value)}%0ADrop: ${encodeURIComponent(drop.value)}%0ADistance: ${km.value} KM%0AGoods: ${goods.value}%0AEstimated Fare: ${encodeURIComponent(₹(fare()))}`;window.open("https://wa.me/919999999999?text="+text,"_blank")}
+function sendWhatsApp(){let text=`Shree Shyam Prime Logistics%0AVehicle: Mahindra Veero 10 Feet%0APickup: ${encodeURIComponent(pickup.value)}%0ADrop: ${encodeURIComponent(drop.value)}%0ADistance: ${km.value} KM%0AGoods: ${goods.value}%0AEstimated Fare: ${encodeURIComponent(₹(fare()))}`;window.open("https://wa.me/919711402957?text="+text,"_blank")}
 fare();
 </script>
 </body></html>
