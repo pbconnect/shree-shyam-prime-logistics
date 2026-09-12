@@ -1,0 +1,9 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Driver App – Shree Shyam Prime Logistics</title>
+<style>body{font-family:Arial;margin:0;background:#f3f4f6;color:#111827}header{background:#111827;color:white;padding:18px}main{max-width:650px;margin:auto;padding:16px}.card{background:#fff;border-radius:15px;padding:18px;margin:12px 0}button{width:100%;padding:13px;border:0;border-radius:10px;margin-top:9px;font-weight:bold}.on{background:#16a34a;color:white}.dark{background:#111827;color:white}.job{border-left:5px solid #f59e0b;padding-left:12px}</style></head>
+<body><header><b>Shree Shyam Prime Logistics — Driver</b></header><main>
+<div class="card"><h2>Driver Status</h2><button class="on" onclick="toggle(this)">GO ONLINE</button><p id="loc">Location sharing: OFF</p></div>
+<div class="card"><h2>Current Job</h2><div class="job"><b>Booking #DEMO1024</b><p>Pickup: Customer location</p><p>Drop: Destination</p><p>Vehicle: Mahindra Veero 10 Feet</p><button class="dark">Accept Job</button><button class="dark">Start Trip</button><button class="dark">Complete Delivery</button></div></div>
+<div class="card"><p>Live GPS Firebase integration is prepared in the project. Add Firebase credentials in <code>config/firebase-config.js</code>.</p></div>
+</main><script>function toggle(b){b.textContent="ONLINE";document.getElementById("loc").textContent="Location sharing: ON (browser permission required)";if(navigator.geolocation)navigator.geolocation.watchPosition(p=>console.log(p.coords.latitude,p.coords.longitude));}</script></body></html>

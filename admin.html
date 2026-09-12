@@ -1,0 +1,10 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Admin Panel</title>
+<style>body{font-family:Arial;background:#f3f4f6;margin:0;color:#111827}header{background:#111827;color:#fff;padding:18px}main{max-width:900px;margin:auto;padding:16px}.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.card{background:#fff;padding:16px;border-radius:14px;margin:10px 0}.num{font-size:28px;font-weight:900}table{width:100%;border-collapse:collapse}td,th{padding:10px;border-bottom:1px solid #e5e7eb;text-align:left}@media(max-width:650px){.grid{grid-template-columns:1fr 1fr}table{font-size:12px}}</style></head>
+<body><header><b>Shree Shyam Prime Logistics — Admin</b></header><main>
+<div class="grid"><div class="card"><small>Today's Bookings</small><div class="num" id="b">0</div></div><div class="card"><small>Active Trips</small><div class="num">0</div></div><div class="card"><small>Drivers Online</small><div class="num">0</div></div><div class="card"><small>Today's Revenue</small><div class="num">₹0</div></div></div>
+<div class="card"><h2>Bookings</h2><table><thead><tr><th>ID</th><th>Pickup</th><th>Drop</th><th>Fare</th><th>Status</th></tr></thead><tbody id="rows"><tr><td colspan="5">No bookings yet</td></tr></tbody></table></div>
+<div class="card"><h2>Pricing Settings</h2><p>Base: ₹250 • Per KM: ₹20 • Minimum: ₹450</p><p>Edit these values in <code>public/index.html</code> for the demo. Production version should store them in a database so admin can change them from this panel.</p></div>
+</main><script>
+fetch("/api/bookings").then(r=>r.json()).then(a=>{b.textContent=a.length;rows.innerHTML=a.length?a.map(x=>`<tr><td>${x.id}</td><td>${x.pickup}</td><td>${x.drop}</td><td>₹${x.fare}</td><td>${x.status}</td></tr>`).join(""):'<tr><td colspan="5">No bookings yet</td></tr>'}).catch(()=>{});
+</script></body></html>
