@@ -1,127 +1,332 @@
+  <!doctype html>
+<html lang="hi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Shree Shyam Prime Logistics</title>
+
+<style>
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  font-family:Arial,sans-serif;
+  background:#f3f4f6;
+  color:#111827;
+}
+
+header{
+  background:#111827;
+  color:#fff;
+  padding:18px;
+}
+
+header h1{
+  margin:0;
+  font-size:22px;
+}
+
+header small{
+  color:#cbd5e1;
+}
+
+main{
+  max-width:650px;
+  margin:auto;
+  padding:14px;
+}
+
+.card{
+  background:#fff;
+  padding:18px;
+  border-radius:18px;
+  margin:12px 0;
+  box-shadow:0 4px 18px #00000010;
+}
+
+label{
+  font-size:14px;
+  font-weight:700;
+  display:block;
+  margin:10px 0 7px;
+}
+
+input,button{
+  width:100%;
+  padding:14px;
+  border-radius:11px;
+  font-size:16px;
+  border:1px solid #cbd5e1;
+}
+
+input:focus{
+  outline:2px solid #f59e0b;
+  border-color:#f59e0b;
+}
+
+button{
+  border:0;
+  font-weight:800;
+  cursor:pointer;
+}
+
+.primary{
+  background:#f59e0b;
+  color:#111827;
+}
+
+.dark{
+  background:#111827;
+  color:#fff;
+}
+
+.hint{
+  font-size:12px;
+  color:#64748b;
+  margin-top:6px;
+}
+
+.fare{
+  background:#111827;
+  color:#fff;
+}
+
+.big{
+  font-size:38px;
+  font-weight:900;
+  margin:5px 0 15px;
+}
+
+.line{
+  display:flex;
+  justify-content:space-between;
+  padding:8px 0;
+  color:#dbeafe;
+}
+
+.total{
+  border-top:1px solid #374151;
+  margin-top:6px;
+  padding-top:12px;
+  font-weight:800;
+  color:#fff;
+}
+
+.status{
+  padding:12px;
+  border-radius:10px;
+  background:#ecfdf5;
+  color:#065f46;
+  display:none;
+  margin-top:12px;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <h1>Shree Shyam Prime Logistics</h1>
+  <small>Mahindra Veero 10 Feet</small>
+</header>
+
+<main>
+
+<div class="card">
+  <h2>Fare Calculator</h2>
+
+  <label>Distance (KM)</label>
+
+  <input
+    id="km"
+    type="number"
+    inputmode="decimal"
+    min="0"
+    step="0.1"
+    value="0"
+    placeholder="KM likhein"
+  >
+
+  <div class="hint">
+    Example: 10, 25, 50 KM
+  </div>
+</div>
+
+
+<div class="card fare">
+
+  <div>Estimated Fare</div>
+
+  <div class="big" id="total">₹800</div>
+
+  <div class="line">
+    <span>Base fare</span>
+    <span>₹800</span>
+  </div>
+
+  <div class="line">
+    <span>Distance fare</span>
+    <span id="distanceFare">₹0</span>
+  </div>
+
+  <div class="line">
+    <span>Distance</span>
+    <span id="fareKm">0.0 KM</span>
+  </div>
+
+  <div class="line total">
+    <span>Total</span>
+    <span id="sum">₹800</span>
+  </div>
+
+</div>
+
+
+<div class="card">
+
+  <button
+    class="primary"
+    onclick="createBooking()">
+    Book Now
+  </button>
+
+  <button
+    class="dark"
+    style="margin-top:9px"
+    onclick="sendWhatsApp()">
+    WhatsApp Booking
+  </button>
+
+  <div id="msg" class="status"></div>
+
+</div>
+
+</main>
+
+
 <script>
-const PRICING = {
-  baseFare: 500,
-  includedKm: 0,
-  perKm: 35,
-  minFare: 500
-};
 
-const rupee = n => "₹" + Math.round(n).toLocaleString("en-IN");
+/* PRICING */
+const BASE_FARE = 800;
+const PER_KM = 42;
 
-const kmInput = document.getElementById("km");
-const loadingInput = document.getElementById("loading");
-const waitingInput = document.getElementById("waiting");
 
-const baseEl = document.getElementById("base");
-const distEl = document.getElementById("dist");
-const loadEl = document.getElementById("load");
-const waitEl = document.getElementById("wait");
-const sumEl = document.getElementById("sum");
-const totalEl = document.getElementById("total");
+const money = n =>
+  "₹" + Math.round(Number(n) || 0)
+  .toLocaleString("en-IN");
 
-function fare() {
-  const km = Math.max(
+
+function getKm(){
+
+  return Math.max(
     0,
-    parseFloat(kmInput.value.replace(",", ".")) || 0
+    parseFloat(
+      document.getElementById("km").value
+    ) || 0
   );
 
-  const load = Number(loadingInput.value) || 0;
-  const wait = Number(waitingInput.value) || 0;
+}
 
-  const distanceFare =
-    Math.max(0, km - PRICING.includedKm) * PRICING.perKm;
 
-  const total = Math.max(
-    PRICING.minFare,
-    PRICING.baseFare + distanceFare + load + wait
-  );
+function fare(){
 
-  baseEl.textContent = rupee(PRICING.baseFare);
-  distEl.textContent = rupee(distanceFare);
-  loadEl.textContent = rupee(load);
-  waitEl.textContent = rupee(wait);
-  sumEl.textContent = rupee(total);
-  totalEl.textContent = rupee(total);
+  const km = getKm();
+
+  const distanceFare = km * PER_KM;
+
+  const total =
+    Math.max(
+      BASE_FARE,
+      BASE_FARE + distanceFare
+    );
+
+
+  document.getElementById("distanceFare")
+    .textContent = money(distanceFare);
+
+  document.getElementById("fareKm")
+    .textContent = km.toFixed(1) + " KM";
+
+  document.getElementById("sum")
+    .textContent = money(total);
+
+  document.getElementById("total")
+    .textContent = money(total);
 
   return total;
 }
 
-document.querySelectorAll("input, select").forEach(el => {
-  el.addEventListener("input", fare);
-  el.addEventListener("change", fare);
-});
 
-async function createBooking() {
-  const phone = document.getElementById("phone").value.trim();
-  const pickup = document.getElementById("pickup").value.trim();
-  const drop = document.getElementById("drop").value.trim();
-  const goods = document.getElementById("goods").value;
+/* LIVE CALCULATION */
+document
+  .getElementById("km")
+  .addEventListener("input", fare);
 
-  const km = parseFloat(kmInput.value) || 0;
-  const loading = Number(loadingInput.value) || 0;
-  const waiting = Number(waitingInput.value) || 0;
 
-  if (!pickup || !drop) {
-    alert("Pickup aur Drop bhariye.");
+/* BOOK NOW */
+function createBooking(){
+
+  const km = getKm();
+
+  if(km <= 0){
+
+    alert("Distance (KM) bhariye.");
+
     return;
   }
 
-  const body = {
-    phone,
-    pickup,
-    drop,
-    km,
-    goods,
-    loading,
-    waiting,
-    fare: fare()
-  };
+  const total = fare();
 
-  try {
-    const r = await fetch("/api/bookings", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(body)
-    });
+  const msg =
+    document.getElementById("msg");
 
-    const x = await r.json();
+  msg.style.display = "block";
 
-    const msg = document.getElementById("msg");
-    msg.style.display = "block";
-    msg.innerHTML =
-      "Booking ID: <b>" +
-      x.id +
-      "</b> — Driver assignment ke liye request bhej di gayi.";
-  } catch (e) {
-    const msg = document.getElementById("msg");
-    msg.style.display = "block";
-    msg.textContent =
-      "Demo mode: booking locally ready. Server start karne par live booking save hogi.";
-  }
+  msg.innerHTML =
+    "Booking ready hai. Total Fare: <b>"
+    + money(total)
+    + "</b>";
+
 }
 
-function sendWhatsApp() {
-  const pickup = document.getElementById("pickup").value;
-  const drop = document.getElementById("drop").value;
-  const goods = document.getElementById("goods").value;
+
+/* WHATSAPP BOOKING */
+function sendWhatsApp(){
+
+  const km = getKm();
+
+  if(km <= 0){
+
+    alert("Distance (KM) bhariye.");
+
+    return;
+  }
+
+  const total = fare();
+
 
   const text =
     "Shree Shyam Prime Logistics\n" +
     "Vehicle: Mahindra Veero 10 Feet\n" +
-    "Pickup: " + pickup + "\n" +
-    "Drop: " + drop + "\n" +
-    "Distance: " + kmInput.value + " KM\n" +
-    "Goods: " + goods + "\n" +
-    "Estimated Fare: " + rupee(fare());
+    "Distance: " + km.toFixed(1) + " KM\n" +
+    "Rate: ₹42/KM\n" +
+    "Base Fare: ₹800\n" +
+    "Estimated Fare: " + money(total);
+
 
   window.open(
-    "https://wa.me/919711402957?text=" +
-    encodeURIComponent(text),
+    "https://wa.me/919711402957?text="
+    + encodeURIComponent(text),
     "_blank"
   );
+
 }
 
+
+/* INITIAL CALCULATION */
 fare();
+
 </script>
+
+</body>
+</html>
