@@ -1,75 +1,269 @@
-<!doctype html>
+ <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Shree Shyam Prime Logistics</title>
+
+<link rel="stylesheet"
+href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+
 <style>
-body{margin:0;font-family:Arial,sans-serif;background:#f3f4f6;color:#111827}
-header{background:#111827;color:#fff;padding:18px;position:sticky;top:0;z-index:4}
-header h1{margin:0;font-size:21px}header small{color:#cbd5e1}
-main{max-width:650px;margin:auto;padding:16px}.card{background:white;padding:18px;border-radius:16px;margin:12px 0;box-shadow:0 4px 16px #0000000d}
-.row{display:grid;grid-template-columns:1fr 1fr;gap:12px}label{font-size:13px;font-weight:700;display:block;margin:10px 0 6px}
-input,select,button{width:100%;padding:13px;border-radius:10px;font-size:15px;border:1px solid #d1d5db;box-sizing:border-box}
-button{border:0;font-weight:800;cursor:pointer}.primary{background:#f59e0b}.dark{background:#111827;color:#fff}.muted{background:#e5e7eb}
-.vehicle{display:flex;align-items:center;gap:15px}.vehicle img{width:145px;height:95px;object-fit:contain}
-.fare{background:#111827;color:white}.big{font-size:34px;font-weight:900}.line{display:flex;justify-content:space-between;padding:7px 0;color:#dbeafe}.total{border-top:1px solid #374151;margin-top:6px;padding-top:10px;font-weight:bold;color:#fff}
-#map{height:260px;border-radius:12px;background:#e5e7eb;display:flex;align-items:center;justify-content:center;color:#64748b}
-.status{padding:12px;border-radius:10px;background:#ecfdf5;color:#065f46;display:none}
-@media(max-width:450px){.row{grid-template-columns:1fr}.vehicle img{width:120px}}
+body{
+ margin:0;
+ font-family:Arial,sans-serif;
+ background:#f3f4f6;
+ color:#111827
+}
+header{
+ background:#111827;
+ color:#fff;
+ padding:18px;
+ position:sticky;
+ top:0;
+ z-index:1000
+}
+header h1{margin:0;font-size:21px}
+header small{color:#cbd5e1}
+
+main{max-width:650px;margin:auto;padding:16px}
+
+.card{
+ background:white;
+ padding:18px;
+ border-radius:16px;
+ margin:12px 0;
+ box-shadow:0 4px 16px #0000000d
+}
+
+.row{
+ display:grid;
+ grid-template-columns:1fr 1fr;
+ gap:12px
+}
+
+label{
+ font-size:13px;
+ font-weight:700;
+ display:block;
+ margin:10px 0 6px
+}
+
+input,select,button{
+ width:100%;
+ padding:13px;
+ border-radius:10px;
+ font-size:15px;
+ border:1px solid #d1d5db;
+ box-sizing:border-box
+}
+
+button{
+ border:0;
+ font-weight:800;
+ cursor:pointer
+}
+
+.primary{background:#f59e0b}
+.dark{background:#111827;color:#fff}
+
+.vehicle{
+ display:flex;
+ align-items:center;
+ gap:15px
+}
+
+.vehicle img{
+ width:145px;
+ height:95px;
+ object-fit:contain
+}
+
+#map{
+ height:300px;
+ border-radius:12px;
+ overflow:hidden
+}
+
+.map-info{
+ margin-top:10px;
+ padding:10px;
+ background:#f3f4f6;
+ border-radius:10px;
+ font-weight:bold
+}
+
+.fare{
+ background:#111827;
+ color:white
+}
+
+.big{
+ font-size:34px;
+ font-weight:900;
+ margin:5px 0 15px
+}
+
+.line{
+ display:flex;
+ justify-content:space-between;
+ padding:7px 0;
+ color:#dbeafe
+}
+
+.total{
+ border-top:1px solid #374151;
+ margin-top:6px;
+ padding-top:10px;
+ font-weight:bold;
+ color:#fff
+}
+
+.status{
+ padding:12px;
+ border-radius:10px;
+ background:#ecfdf5;
+ color:#065f46;
+ display:none;
+ margin-top:12px
+}
+
+@media(max-width:450px){
+ .row{grid-template-columns:1fr}
+ .vehicle img{width:120px}
+}
 </style>
 </head>
+
 <body>
-<header><h1>Shree Shyam Prime Logistics</h1><small>Customer Booking • Mahindra Veero 10 Feet</small></header>
+
+<header>
+<h1>Shree Shyam Prime Logistics</h1>
+<small>Customer Booking • Mahindra Veero 10 Feet</small>
+</header>
+
 <main>
-<div class="card vehicle"><img src="mahindra-veero.jpg"><div><b>Mahindra Veero – 10 Feet</b><br><small>Pickup & local goods transport</small></div></div>
+
+<div class="card vehicle">
+<img src="mahindra-veero.jpg" alt="Mahindra Veero">
+<div>
+<b>Mahindra Veero – 10 Feet</b><br>
+<small>Pickup & local goods transport</small>
+</div>
+</div>
 
 <div class="card">
+
 <h2>Book a Pickup</h2>
-<label>Mobile Number</label><input id="phone" placeholder="+91 98765 43210">
-<label>Pickup</label><input id="pickup" placeholder="Pickup address">
-<label>Drop</label><input id="drop" placeholder="Drop address">
+
+<label>Mobile Number</label>
+<input id="phone" type="tel" placeholder="+91 98765 43210">
+
+<label>Pickup</label>
+<input id="pickup" placeholder="Pickup address">
+
+<label>Drop</label>
+<input id="drop" placeholder="Drop address">
+
 <div class="row">
-<div><label>Distance (KM)</label><input id="km" type="number" min="0" value="10"></div>
-<div><label>Goods</label><select id="goods"><option>General</option><option>Furniture</option><option>Electronics</option><option>Commercial Goods</option></select></div>
-</div>
-<div class="row">
-<div><label>Loading / Unloading</label><select id="loading"><option value="0">Included</option><option value="150">₹150</option><option value="300">₹300</option><option value="500">₹500</option></select></div>
-<div><label>Waiting</label><select id="waiting"><option value="0">No waiting</option><option value="100">1 hour – ₹100</option><option value="200">2 hours – ₹200</option><option value="300">3 hours – ₹300</option></select></div>
-</div>
+
+<div>
+<label>Distance (KM)</label>
+<input id="km" type="number" min="0" value="0" readonly>
 </div>
 
-<div class="card"><div id="map">Google Maps will appear here after API key setup</div></div>
+<div>
+<label>Goods</label>
+<select id="goods">
+<option>General</option>
+<option>Furniture</option>
+<option>Electronics</option>
+<option>Commercial Goods</option>
+</select>
+</div>
+
+</div>
+
+<div class="row">
+
+<div>
+<label>Loading / Unloading</label>
+<select id="loading">
+<option value="0">Included</option>
+<option value="150">₹150</option>
+<option value="300">₹300</option>
+<option value="500">₹500</option>
+</select>
+</div>
+
+<div>
+<label>Waiting</label>
+<select id="waiting">
+<option value="0">No waiting</option>
+<option value="100">1 hour – ₹100</option>
+<option value="200">2 hours – ₹200</option>
+<option value="300">3 hours – ₹300</option>
+</select>
+</div>
+
+</div>
+
+<button class="dark" style="margin-top:12px" onclick="findRoute()">
+📍 Calculate Distance & Route
+</button>
+
+</div>
+
+<div class="card">
+<div id="map"></div>
+<div id="mapInfo" class="map-info">
+Pickup aur Drop address डालकर route calculate karein.
+</div>
+</div>
 
 <div class="card fare">
-<div>Estimated Fare</div><div class="big" id="total">₹500</div>
-<div class="line"><span>Base fare</span><span id="base">₹500</span></div>
-<div class="line"><span>Distance fare</span><span id="dist">₹200</span></div>
-<div class="line"><span>Loading / Unloading</span><span id="load">₹0</span></div>
-<div class="line"><span>Waiting</span><span id="wait">₹0</span></div>
-<div class="line total"><span>Total</span><span id="sum">₹500</span></div>
+
+<div>Estimated Fare</div>
+
+<div class="big" id="total">₹500</div>
+
+<div class="line">
+<span>Base fare</span>
+<span id="base">₹500</span>
+</div>
+
+<div class="line">
+<span>Distance fare</span>
+<span id="distanceFare">₹0</span>
+</div>
+
+<div class="line">
+<span>Loading / Unloading</span>
+<span id="load">₹0</span>
+</div>
+
+<div class="line">
+<span>Waiting</span>
+<span id="wait">₹0</span>
+</div>
+
+<div class="line total">
+<span>Total</span>
+<span id="sum">₹500</span>
+</div>
+
 </div>
 
 <div class="card">
-<button class="primary" onclick="createBooking()">Book Now</button>
-<button class="dark" style="margin-top:9px" onclick="sendWhatsApp()">WhatsApp Booking</button>
+
+<button class="primary" onclick="createBooking()">
+Book Now
+</button>
+
+<button class="dark" style="margin-top:9px" onclick="sendWhatsApp()">
+WhatsApp Booking
+</button>
+
 <div id="msg" class="status"></div>
-</div>
-</main>
-<script>
-const PRICING={baseFare:500,includedKm:0,perKm:35,minFare:500};
-const ₹=n=>"₹"+Math.round(n).toLocaleString("en-IN");
-function fare(){
- let km=Math.max(0,+document.getElementById("km").value||0), load=+document.getElementById("loading").value, wait=+document.getElementById("waiting").value;
- let dist=Math.max(0,km-PRICING.includedKm)*PRICING.perKm,total=Math.max(PRICING.minFare,PRICING.baseFare+dist+load+wait);
- base.textContent=₹(PRICING.baseFare);dist.textContent=₹(dist);load.textContent=₹(load);wait.textContent=₹(wait);sum.textContent=₹(total);document.getElementById("total").textContent=₹(total);return total;
-}
-document.querySelectorAll("input,select").forEach(e=>e.addEventListener("input",fare));
-async function createBooking(){
- const p=pickup.value.trim(),d=drop.value.trim(); if(!p||!d){alert("Pickup aur Drop bhariye.");return}
- const body={phone:document.getElementById("phone").value,pickup:p,drop:d,km:+km.value,goods:goods.value,loading:+loading.value,waiting:+waiting.value,fare:fare()};
- try{let r=await fetch("/api/bookings",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)});let x=await r.json();msg.style.display="block";msg.innerHTML="Booking ID: <b>"+x.id+"</b> — Driver assignment ke liye request bhej di gayi."}catch(e){msg.style.display="block";msg.textContent="Demo mode: booking locally ready. Server start karne par live booking save hogi."}
-}
-function sendWhatsApp(){let text=`Shree Shyam Prime Logistics%0AVehicle: Mahindra Veero 10 Feet%0APickup: ${encodeURIComponent(pickup.value)}%0ADrop: ${encodeURIComponent(drop.value)}%0ADistance: ${km.value} KM%0AGoods: ${goods.value}%0AEstimated Fare: ${encodeURIComponent(₹(fare()))}`;window.open("https://wa.me/919711402957?text="+text,"_blank")}
-fare();
-</script>
-</body></html>
+
+</
